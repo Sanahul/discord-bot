@@ -42,3 +42,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Ticket system configuration
+ticket_config.json
