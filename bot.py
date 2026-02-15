@@ -36,6 +36,42 @@ async def purge_error(ctx, error):
     elif isinstance(error, commands.BadArgument):
         await ctx.send("❌ Please provide a valid number. Usage: `$purge <amount>`")
 
+# ===== SERVERINFO COMMAND =====
+@bot.command()
+async def serverinfo(ctx):
+    """Display information about the server"""
+    try:
+        guild = ctx.guild
+        
+        if guild is None:
+            await ctx.send("❌ This command can only be used in a server.")
+            return
+        
+        # Create embed with server information
+        embed = discord.Embed(
+            title=f"📊 Server Information",
+            description=f"Information about **{guild.name}**",
+            color=0xFFC0CB  # Pink color
+        )
+        
+        # Add server icon as thumbnail
+        if guild.icon:
+            embed.set_thumbnail(url=guild.icon.url)
+        
+        # Add server information fields
+        embed.add_field(name="🏷️ Server Name", value=guild.name, inline=True)
+        embed.add_field(name="🆔 Server ID", value=guild.id, inline=True)
+        embed.add_field(name="👑 Owner", value=guild.owner.mention if guild.owner else "Unknown", inline=True)
+        embed.add_field(name="👥 Member Count", value=guild.member_count, inline=True)
+        embed.add_field(name="📺 Channel Count", value=len(guild.channels), inline=True)
+        embed.add_field(name="🎭 Role Count", value=len(guild.roles), inline=True)
+        embed.add_field(name="📅 Creation Date", value=guild.created_at.strftime("%B %d, %Y"), inline=False)
+        
+        await ctx.send(embed=embed)
+        
+    except Exception as e:
+        await ctx.send(f"❌ An error occurred while fetching server information: {str(e)}")
+
 async def load_cogs():
     """Load all cogs"""
     await bot.load_extension('cogs.ticket_system')
