@@ -1,75 +1,47 @@
 import discord
 from discord.ext import commands
-import os
 
-# Bot setup
+class MyBot(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix='!')
+        self.staff_users = []  # List to keep track of users who understood
+        self.novice_users = []  # List to keep track of users who didn't understand
+
+    async def setup_hook(self):
+        self.add_command(self.mminfo)
+
+    @commands.command()
+    async def mminfo(self, ctx):
+        embed = discord.Embed(title='Your Information', description='Please respond with one of the buttons below.', color=0x00ff00)
+        embed.set_image(url='https://example.com/your-image.png')  # Update with actual image URL
+
+        button1 = discord.ui.Button(label='Understand', style=discord.ButtonStyle.green)
+        button2 = discord.ui.Button(label="Didn't Understand", style=discord.ButtonStyle.red)
+
+        async def on_button1_click(interaction):
+            self.staff_users.append(interaction.user.name)
+            await interaction.response.send_message('Thank you for your feedback!', ephemeral=True)
+            await self.update_embed(ctx)
+
+        async def on_button2_click(interaction):
+            self.novice_users.append(interaction.user.name)
+            await interaction.response.send_message('Thank you for your feedback!', ephemeral=True)
+            await self.update_embed(ctx)
+
+        button1.callback = on_button1_click
+        button2.callback = on_button2_click
+
+        view = discord.ui.View()  
+        view.add_item(button1)
+        view.add_item(button2)
+        await ctx.send(embed=embed, view=view)
+
+    async def update_embed(self, ctx):
+        embed = discord.Embed(title='Your Information', color=0x00ff00)
+        embed.add_field(name='Users Who Understood:', value=', '.join(self.staff_users) if self.staff_users else 'None')
+        embed.add_field(name='Users Who Didn\'t Understand:', value=', '.join(self.novice_users) if self.novice_users else 'None')
+        await ctx.send(embed=embed)
+
 intents = discord.Intents.default()
-intents.message_content = True
-
-bot = commands.Bot(command_prefix='!', intents=intents)
-
-@bot.event
-async def on_ready():
-    print(f'✅ Bot is online as {bot.user}')
-    await bot.change_presence(activity=discord.Game(name="!help"))
-
-# Ping command
-@bot.command(name='ping')
-async def ping(ctx):
-    """Check bot latency"""
-    latency = round(bot.latency * 1000)
-    await ctx.send(f'🏓 Pong! Latency: {latency}ms')
-
-# Purge command
-@bot.command(name='purge')
-@commands.has_permissions(manage_messages=True)
-async def purge(ctx, amount: int):
-    """Delete messages from the channel"""
-    if amount <= 0 or amount > 100:
-        await ctx.send('❌ Please enter a number between 1 and 100.')
-        return
-    
-    deleted = await ctx.channel.purge(limit=amount)
-    await ctx.send(f'✅ Deleted {len(deleted)} messages.', delete_after=5)
-
-@purge.error
-async def purge_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send("❌ You don't have permission to use this command.")
-
-# MMInfo command
-@bot.command(name='mminfo')
-async def mminfo(ctx):
-    """Display Middleman (MM) information"""
-    embed = discord.Embed(
-        title="Middleman (MM) Information",
-        description="Learn about our Middleman system",
-        color=discord.Color.blue()
-    )
-    
-    embed.add_field(
-        name="What is a MM?",
-        value="A MM (Middleman) is a trusted member of our server handpicked by server owners. MM's are required to follow Discord's Terms of Service.",
-        inline=False
-    )
-    
-    embed.add_field(
-        name="MM Rules",
-        value="Once a ticket is created the MM that claims it is responsible for your trade. You cannot choose your MM. After this trade you are required to vouch for your MM, otherwise you will be blacklisted from our server.",
-        inline=False
-    )
-    
-    embed.add_field(
-        name="How a MM Works",
-        value="MM's hold the items of the seller and wait for the buyer to give the items to the seller. Once this process has been completed the MM will transfer the items to the buyer.",
-        inline=False
-    )
-    
-    await ctx.send(embed=embed)
-
-# Load token
-TOKEN = os.getenv('DISCORD_TOKEN')
-if not TOKEN:
-    raise ValueError("DISCORD_TOKEN not found! Set it as an environment variable.")
-
-bot.run(TOKEN)
+bot = MyBot()
+bot.run('YOUR_TOKEN')  # Make sure to replace 'YOUR_TOKEN' with your actual bot token.
