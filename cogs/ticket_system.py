@@ -2,75 +2,61 @@ import discord
 from discord.ext import commands
 
 class TicketModal(discord.ui.Modal):
-    # Modal implementation
-    pass
+    # Implement the TicketModal class features here
 
 class TicketPanelView(discord.ui.View):
-    # View implementation
-    pass
+    # Implement the TicketPanelView class features here
 
 class TicketControlView(discord.ui.View):
-    # Control view implementation
-    pass
+    # Implement the TicketControlView class features here
 
 class TicketSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    async def add(self, ctx):
-        # Implementation
-        pass
-    
-    @commands.command()
-    async def remove(self, ctx):
-        # Implementation
-        pass
-    
+    async def ticketpanel(self, ctx):
+        # Implement ticket panel command
+
     @commands.command()
     async def claim(self, ctx):
-        # Implementation
-        pass
-    
-    @commands.command()
-    async def unclaim(self, ctx):
-        # Implementation
-        pass
-    
-    @commands.command()
-    async def renameticket(self, ctx):
-        # Implementation
-        pass
-    
-    @commands.command()
-    async def transfer(self, ctx):
-        # Implementation
-        pass
-    
+        # Implement claim command
+
     @commands.command()
     async def close(self, ctx):
-        # Implementation
-        pass
-    
+        # Implement close command
+
     @commands.command()
-    async def ticketpanel(self, ctx):
-        # Implementation
-        pass
-    
+    async def add(self, ctx):
+        # Implement add command
+
+    @commands.command()
+    async def remove(self, ctx):
+        # Implement remove command
+
+    @commands.command()
+    async def transfer(self, ctx):
+        # Implement transfer command
+
+    @commands.command()
+    async def unclaim(self, ctx):
+        # Implement unclaim command
+
+    @commands.command()
+    async def renameticket(self, ctx):
+        # Implement rename ticket command
+
     @commands.command()
     async def setticketcategory(self, ctx):
-        # Implementation
-        pass
-    
+        # Implement set ticket category command
+
     @commands.command()
     async def setsupportrole(self, ctx):
-        # Implementation
-        pass
-    
+        # Implement set support role command
+
     @commands.command()
     async def setlogchannel(self, ctx):
-        # Implementation
-        pass
+        # Implement set log channel command
 
 async def setup(bot):
     await bot.add_cog(TicketSystem(bot))
