@@ -72,6 +72,57 @@ async def serverinfo(ctx):
         print(f"Error in serverinfo command: {e}")  # Log server-side
         await ctx.send("❌ An error occurred while fetching server information. Please try again later.")
 
+# ===== MMINFO COMMAND =====
+@bot.command()
+async def mminfo(ctx):
+    """Display information about the Middleman system"""
+    try:
+        # Create embed with middleman information
+        embed = discord.Embed(
+            title="🎫 Middleman Information",
+            description="A middleman is a trusted third party who facilitates trades between two users to ensure both parties are protected and the trade goes smoothly.",
+            color=0xFFC0CB  # Pink color
+        )
+        
+        # Add field: How it works
+        embed.add_field(
+            name="📋 How it Works",
+            value=(
+                "1️⃣ User creates a ticket using the Create Ticket button\n"
+                "2️⃣ Fills out a form with trade details (other trader, what you're giving, what you're receiving)\n"
+                "3️⃣ A middleman claims the ticket\n"
+                "4️⃣ Both parties send items/currency to the middleman\n"
+                "5️⃣ Middleman verifies both sides and completes the trade\n"
+                "6️⃣ Ticket is closed"
+            ),
+            inline=False
+        )
+        
+        # Add field: Benefits
+        embed.add_field(
+            name="✨ Benefits",
+            value=(
+                "• Protection against scams\n"
+                "• Fair and transparent trades\n"
+                "• Secure item/currency holding\n"
+                "• Dispute resolution support"
+            ),
+            inline=False
+        )
+        
+        # Add field: Getting Started
+        embed.add_field(
+            name="🚀 Getting Started",
+            value="To create a ticket, look for the ticket panel and click the **Create Ticket** button. Fill out the form with your trade details and a middleman will assist you!",
+            inline=False
+        )
+        
+        await ctx.send(embed=embed)
+        
+    except Exception as e:
+        print(f"Error in mminfo command: {e}")  # Log server-side
+        await ctx.send("❌ An error occurred while fetching middleman information. Please try again later.")
+
 async def load_cogs():
     """Load all cogs"""
     await bot.load_extension('cogs.ticket_system')
