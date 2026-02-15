@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 from typing import Optional
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 
 class TicketModal(discord.ui.Modal, title='Create Middleman Ticket'):
     """Modal form for creating a new ticket"""
@@ -221,7 +221,7 @@ class TicketSystem(commands.Cog):
             'giving': giving,
             'receiving': receiving,
             'claimed_by': None,
-            'created_at': datetime.utcnow(),
+            'created_at': datetime.now(timezone.utc),
             'status': 'open',
             'renamed': False
         }
@@ -231,7 +231,7 @@ class TicketSystem(commands.Cog):
             title=f'🎫 Ticket #{ticket_num}',
             description='Middleman ticket created',
             color=discord.Color.green(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         embed.add_field(name='Creator', value=creator.mention, inline=True)
         embed.add_field(name='Other Trader', value=other_trader, inline=True)
@@ -287,7 +287,7 @@ class TicketSystem(commands.Cog):
             title='✋ Ticket Claimed',
             description=f'{interaction.user.mention} has claimed this ticket!',
             color=discord.Color.blue(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         await interaction.response.send_message(embed=embed)
@@ -315,7 +315,7 @@ class TicketSystem(commands.Cog):
             title=f'🔒 Ticket #{ticket["ticket_num"]} Closed',
             description=f'Ticket closed by {closer.mention}',
             color=discord.Color.red(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         embed.add_field(name='Creator', value=f'<@{ticket["creator"]}>', inline=True)
         embed.add_field(name='Other Trader', value=ticket['other_trader'], inline=True)
@@ -340,7 +340,7 @@ class TicketSystem(commands.Cog):
                 embed = discord.Embed(
                     description=message,
                     color=discord.Color.blue(),
-                    timestamp=datetime.utcnow()
+                    timestamp=datetime.now(timezone.utc)
                 )
                 if channel:
                     embed.add_field(name='Channel', value=channel.mention)
@@ -426,7 +426,7 @@ class TicketSystem(commands.Cog):
             title='✋ Ticket Claimed',
             description=f'{ctx.author.mention} has claimed this ticket!',
             color=discord.Color.blue(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         await ctx.send(embed=embed)
@@ -464,7 +464,7 @@ class TicketSystem(commands.Cog):
             title='🔓 Ticket Unclaimed',
             description=f'{ctx.author.mention} has unclaimed this ticket!',
             color=discord.Color.gold(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         await ctx.send(embed=embed)
@@ -515,7 +515,6 @@ class TicketSystem(commands.Cog):
         ticket = self.tickets[ctx.channel.id]
         
         # Transfer the ticket
-        old_claimer = ticket['claimed_by']
         ticket['claimed_by'] = member.id
         ticket['status'] = 'claimed'
         
@@ -523,7 +522,7 @@ class TicketSystem(commands.Cog):
             title='🔄 Ticket Transferred',
             description=f'Ticket transferred to {member.mention} by {ctx.author.mention}',
             color=discord.Color.purple(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         await ctx.send(embed=embed)
