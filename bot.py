@@ -36,7 +36,15 @@ class MMInfoView(discord.ui.View):
 async def mminfo(ctx):
     embed = discord.Embed(
         title="Middleman Information",
-        description="Please read carefully.\n\nClick a button below to confirm.",
+        description="**What is a MM?**
+A MM (Middleman) is a trusted member of our server handpicked by server owners. MM's are required to follow Discord's Terms of Service.
+
+**MM Rules**
+Once a ticket is created the MM that claims it is responsible for your trade. You cannot choose your MM. After this trade you are required to vouch for your MM, otherwise you will be blacklisted from our server.
+
+**How a MM Works**
+MM's hold the items of the seller and wait for the buyer to give the items to the seller. Once this process has been completed the MM will transfer the items to the buyer. A photo with more details is shown below.
+.\n\nClick a button below to confirm.",
         color=discord.Color.blue()
     )
 
