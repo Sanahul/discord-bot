@@ -180,18 +180,18 @@ class TicketSystem(commands.Cog):
         embed2 = discord.Embed(
             title="**Middleman rules and information**",
             description=(
-                "<:01apinkdot:1437864554750152764> at the moment, we do not MM account trades unless the other side is holdable (ex. pp for roblox). it is your responsibility to secure the account you receive. keep in mind we only have 1 account mm if the account needs to be held. \n"
-                "<:01apinkdot:1437864554750152764> we can MM trades involving gift cards, as long as the other side of the trade is holdable! (example: adopt me for gift card)\n"
-                "<:01apinkdot:1437864554750152764> we are not responsible for any items lost during or after the trade. (ex. if our account gets banned on roblox mid trade). make sure all the info you provide in the ticket is accurate. if it is incorrect and we send items to the wrong person, we are not responsible.\n"
-                "<:01apinkdot:1437864554750152764> we do not handle conversions or exchanges. please complete any necessary exchanges before opening a ticket.\n"
-                "<:01apinkdot:1437864554750152764> a tip is __REQUIRED__ for all risky trades.\n"
-                "<:zzz:1439344035394359438><:01apinkline:1437864559057834055> the tip amount depends on the middleman and the trade value. a tip is non refundable, if you held your item/ received it, we still keep our tip even if the trade is canceled. \n"
-                "<:01apinkdot:1437864554750152764> you must comply with the middleman and follow their TOS.\n"
-                "<:01apinkdot:1437864554750152764> please understand the risks involved before you continue with a trade/ticket.\n"
-                "<:01apinkdot:1437864554750152764> the middleman can decline any trade they're not comfortable with—please respect their decision and avoid arguing.\n"
-                "<:01apinkdot:1437864554750152764> ghosting/scamming a trade is bannable (don't do it).\n"
-                "<:01apinkdot:1437864554750152764> you cannot choose your middleman unless you need icyella herself. you can request a new mm if there are any issues i.e. fees, etc.\n"
-                "<:zzz:1439344035394359438><:01apinkline:1437864559057834055> please keep in mind before opening a MM ticket for ella that she does require a 5% fee."
+                "• at the moment, we do not MM account trades unless the other side is holdable (ex. pp for roblox). it is your responsibility to secure the account you receive. keep in mind we only have 1 account mm if the account needs to be held. \n"
+                "• we can MM trades involving gift cards, as long as the other side of the trade is holdable! (example: adopt me for gift card)\n"
+                "• we are not responsible for any items lost during or after the trade. (ex. if our account gets banned on roblox mid trade). make sure all the info you provide in the ticket is accurate. if it is incorrect and we send items to the wrong person, we are not responsible.\n"
+                "• we do not handle conversions or exchanges. please complete any necessary exchanges before opening a ticket.\n"
+                "• a tip is REQUIRED for all risky trades.\n"
+                "• the tip amount depends on the middleman and the trade value. a tip is non refundable, if you held your item/ received it, we still keep our tip even if the trade is canceled. \n"
+                "• you must comply with the middleman and follow their TOS.\n"
+                "• please understand the risks involved before you continue with a trade/ticket.\n"
+                "• the middleman can decline any trade they're not comfortable with—please respect their decision and avoid arguing.\n"
+                "• ghosting/scamming a trade is bannable (don't do it).\n"
+                "• you cannot choose your middleman unless you need icyella herself. you can request a new mm if there are any issues i.e. fees, etc.\n"
+                "• please keep in mind before opening a MM ticket for ella that she does require a 5% fee."
             ),
             color=0xFFC0CB  # Pink color
         )
@@ -200,10 +200,10 @@ class TicketSystem(commands.Cog):
         embed3 = discord.Embed(
             title="**additional information**",
             description=(
-                "<:01apinkdot:1437864554750152764> if you're trading for cashapp make sure you both have adult cashapp accounts or minor cashapp accounts.\n"
+                "• if you're trading for cashapp make sure you both have adult cashapp accounts or minor cashapp accounts.\n"
                 "cashapp will not let adults receive/send money to minors & vice versa.\n"
-                "<:01apinkdot:1437864554750152764> if you have any questions or concerns regarding MMs, mmban, or ticket info please make a ticket in the HR section.\n"
-                "<:01apinkdot:1437864554750152764> always remember just because someone has mod doesn't mean they are MM's, it is separate."
+                "• if you have any questions or concerns regarding MMs, mmban, or ticket info please make a ticket in the HR section.\n"
+                "• always remember just because someone has mod doesn't mean they are MM's, it is separate."
             ),
             color=0xFFC0CB  # Pink color
         )
@@ -212,18 +212,18 @@ class TicketSystem(commands.Cog):
         embed4 = discord.Embed(
             title="**need a trusted Middleman**",
             description=(
-                "<:01apinkdot:1437864554750152764> open a ticket and complete the form, including the User ID of the person you are trading with.\n"
-                "<:01apinkdot:1437864554750152764> only individuals with the MM role can serve as middlemen; be sure to check their limits beforehand.\n"
-                "<:01apinkdot:1437864554750152764> __disclaimer:__ while we aim to respond to tickets as quickly as possible, please understand that we have other responsibilities."
+                "• open a ticket and complete the form, including the User ID of the person you are trading with.\n"
+                "• only individuals with the MM role can serve as middlemen; be sure to check their limits beforehand.\n"
+                "• disclaimer: while we aim to respond to tickets as quickly as possible, please understand that we have other responsibilities."
             ),
             color=0xFFC0CB  # Pink color
         )
         
         view = TicketPanelView(self)
-        await ctx.send(embed=embed1)
+        await ctx.send(embed=embed1, view=view)
         await ctx.send(embed=embed2)
         await ctx.send(embed=embed3)
-        await ctx.send(embed=embed4, view=view)
+        await ctx.send(embed=embed4)
         await ctx.message.delete()
     
     @ticketpanel.error
