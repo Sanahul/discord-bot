@@ -37,5 +37,10 @@ async def hello(ctx):
 # Run the bot
 if __name__ == '__main__':
     if TOKEN is None:
-        raise ValueError('DISCORD_TOKEN environment variable is not set. Please set it before running the bot.')
+        raise ValueError(
+            'DISCORD_TOKEN environment variable is not set.\n'
+            'Please set it using one of the following methods:\n'
+            '  1. Create a .env file with: DISCORD_TOKEN=your_token_here\n'
+            '  2. Set it in your shell: export DISCORD_TOKEN=your_token_here'
+        )
     bot.run(TOKEN)
