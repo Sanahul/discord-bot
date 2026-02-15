@@ -1,15 +1,19 @@
+# Updated main.py to disable the default help command and set a custom help command
+
 import discord
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix='!')
+intents = discord.Intents.default()
 
-# Disabling the default help command
-bot.remove_command('help')
+# Create a bot instance with help_command set to None
+bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
 
-# Custom commands (formerly help command)
 @bot.command(name='commands')
 async def commands(ctx):
-    help_text = "Here are the commands you can use:
-    - !command1
-    - !command2\n    More commands coming soon!"
-    await ctx.send(help_text)
+    await ctx.send("Available commands:") # Add your custom command responses here
+
+# Other bot events and commands can go here
+
+
+# Start the bot
+bot.run('YOUR_TOKEN')
