@@ -1,27 +1,20 @@
-import os
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
+class MatchmakingInfo(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-intents = discord.Intents.default()
-intents.message_content = True
+    @commands.command(name='mminfo')
+    async def mminfo(self, ctx):
+        embed = discord.Embed(
+            title='Matchmaking Information',
+            color=discord.Color.blue()
+        )
+        embed.add_field(name='Status', value='Currently matchmaking is underway.', inline=False)
+        embed.add_field(name='Estimated Time', value='2-5 minutes', inline=False)
+        embed.add_field(name='Players in Queue', value='42', inline=False)
+        await ctx.send(embed=embed)
 
-bot = commands.Bot(command_prefix='!', intents=intents, help_command=None)
-
-@bot.event
-async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
-    await bot.change_presence(activity=discord.Game(name='!ping'))
-
-@bot.command(name='ping')
-async def ping(ctx):
-    await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
-
-@bot.command(name='hello')
-async def hello(ctx):
-    await ctx.send(f'Hello {ctx.author.name}!')
-
-bot.run(TOKEN)
+def setup(bot):
+    bot.add_cog(MatchmakingInfo(bot))
