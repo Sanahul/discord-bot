@@ -172,22 +172,58 @@ class TicketSystem(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def ticketpanel(self, ctx):
         """Create the ticket panel with create ticket button"""
-        embed = discord.Embed(
-            title="🎫 Middleman Ticket System",
+        # Embed 1 - Welcome/Header with image
+        embed1 = discord.Embed(color=0xFFC0CB)  # Pink color
+        embed1.set_image(url="https://cdn.discordapp.com/attachments/1466064818329882649/1472600743084167199/11223522fd5e54a39e3839fbb5dda945-1.jpg?ex=699329d0&is=6991d850&hm=4bb941c5b7d7e13a3e879947f9b6ce4b2ecadb4bc512b1edc14c4387697a071d&")
+        
+        # Embed 2 - Middleman rules and information
+        embed2 = discord.Embed(
+            title="**Middleman rules and information**",
             description=(
-                "Click the button below to create a new middleman ticket.\n\n"
-                "**How it works:**\n"
-                "1. Click 'Create Ticket'\n"
-                "2. Fill out the form with trade details\n"
-                "3. Wait for a middleman to assist you\n\n"
-                "**Please be patient!** A staff member will help you shortly."
+                "<:01apinkdot:1437864554750152764> at the moment, we do not MM account trades unless the other side is holdable (ex. pp for roblox). it is your responsibility to secure the account you receive. keep in mind we only have 1 account mm if the account needs to be held. \n"
+                "<:01apinkdot:1437864554750152764> we can MM trades involving gift cards, as long as the other side of the trade is holdable! (example: adopt me for gift card)\n"
+                "<:01apinkdot:1437864554750152764> we are not responsible for any items lost during or after the trade. (ex. if our account gets banned on roblox mid trade). make sure all the info you provide in the ticket is accurate. if it is incorrect and we send items to the wrong person, we are not responsible.\n"
+                "<:01apinkdot:1437864554750152764> we do not handle conversions or exchanges. please complete any necessary exchanges before opening a ticket.\n"
+                "<:01apinkdot:1437864554750152764> a tip is __REQUIRED__ for all risky trades.\n"
+                "<:zzz:1439344035394359438><:01apinkline:1437864559057834055> the tip amount depends on the middleman and the trade value. a tip is non refundable, if you held your item/ received it, we still keep our tip even if the trade is canceled. \n"
+                "<:01apinkdot:1437864554750152764> you must comply with the middleman and follow their TOS.\n"
+                "<:01apinkdot:1437864554750152764> please understand the risks involved before you continue with a trade/ticket.\n"
+                "<:01apinkdot:1437864554750152764> the middleman can decline any trade they're not comfortable with—please respect their decision and avoid arguing.\n"
+                "<:01apinkdot:1437864554750152764> ghosting/scamming a trade is bannable (don't do it).\n"
+                "<:01apinkdot:1437864554750152764> you cannot choose your middleman unless you need icyella herself. you can request a new mm if there are any issues i.e. fees, etc.\n"
+                "<:zzz:1439344035394359438><:01apinkline:1437864559057834055> please keep in mind before opening a MM ticket for ella that she does require a 5% fee."
             ),
-            color=discord.Color.green()
+            color=0xFFC0CB  # Pink color
         )
-        embed.set_footer(text="Middleman Tickets • Safe Trading")
+        
+        # Embed 3 - Additional information
+        embed3 = discord.Embed(
+            title="**additional information**",
+            description=(
+                "<:01apinkdot:1437864554750152764> if you're trading for cashapp make sure you both have adult cashapp accounts or minor cashapp accounts.\n"
+                "cashapp will not let adults receive/send money to minors & vice versa.\n"
+                "<:01apinkdot:1437864554750152764> if you have any questions or concerns regarding MMs, mmban, or ticket info please make a ticket in the HR section.\n"
+                "<:01apinkdot:1437864554750152764> always remember just because someone has mod doesn't mean they are MM's, it is separate."
+            ),
+            color=0xFFC0CB  # Pink color
+        )
+        
+        # Embed 4 - Need a trusted Middleman
+        embed4 = discord.Embed(
+            title="**need a trusted Middleman**",
+            description=(
+                "<:01apinkdot:1437864554750152764> open a ticket and complete the form, including the User ID of the person you are trading with.\n"
+                "<:01apinkdot:1437864554750152764> only individuals with the MM role can serve as middlemen; be sure to check their limits beforehand.\n"
+                "<:01apinkdot:1437864554750152764> __disclaimer:__ while we aim to respond to tickets as quickly as possible, please understand that we have other responsibilities."
+            ),
+            color=0xFFC0CB  # Pink color
+        )
         
         view = TicketPanelView(self)
-        await ctx.send(embed=embed, view=view)
+        await ctx.send(embed=embed1)
+        await ctx.send(embed=embed2)
+        await ctx.send(embed=embed3)
+        await ctx.send(embed=embed4, view=view)
         await ctx.message.delete()
     
     @ticketpanel.error
