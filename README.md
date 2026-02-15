@@ -34,6 +34,7 @@ See [TICKET_SYSTEM.md](TICKET_SYSTEM.md) for detailed documentation.
 
 ### Bot Commands
 - `$purge <amount>` - Delete messages (requires Manage Messages permission)
+- `$serverinfo` - Display information about the server
 
 ### Ticket System Commands
 
