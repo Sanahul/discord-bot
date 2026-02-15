@@ -59,7 +59,6 @@ async def serverinfo(ctx):
             embed.set_thumbnail(url=guild.icon.url)
         
         # Add server information fields
-        embed.add_field(name="🏷️ Server Name", value=guild.name, inline=True)
         embed.add_field(name="🆔 Server ID", value=guild.id, inline=True)
         embed.add_field(name="👑 Owner", value=guild.owner.mention if guild.owner else "Unknown", inline=True)
         embed.add_field(name="👥 Member Count", value=guild.member_count, inline=True)
@@ -70,7 +69,8 @@ async def serverinfo(ctx):
         await ctx.send(embed=embed)
         
     except Exception as e:
-        await ctx.send(f"❌ An error occurred while fetching server information: {str(e)}")
+        print(f"Error in serverinfo command: {e}")  # Log server-side
+        await ctx.send("❌ An error occurred while fetching server information. Please try again later.")
 
 async def load_cogs():
     """Load all cogs"""
