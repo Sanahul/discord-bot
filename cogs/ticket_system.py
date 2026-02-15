@@ -1,3 +1,9 @@
-# Content of the file
-# Assuming there’s a section where the default support role ID is set. Update that part like:
-DEFAULT_SUPPORT_ROLE_ID = 1466819555375452181
+class TicketSystem:
+    def __init__(self, bot):
+        self.bot = bot
+        self.DEFAULT_SUPPORT_ROLE_ID = 1466819555375452181
+        # Initialize other attributes and methods of the ticket system
+
+    # Define rest of the ticket system methods
+    
+# More code for class and methods
