@@ -220,10 +220,10 @@ class TicketSystem(commands.Cog):
         )
         
         view = TicketPanelView(self)
-        await ctx.send(embed=embed1, view=view)
+        await ctx.send(embed=embed1)
         await ctx.send(embed=embed2)
         await ctx.send(embed=embed3)
-        await ctx.send(embed=embed4)
+        await ctx.send(embed=embed4, view=view)
         await ctx.message.delete()
     
     @ticketpanel.error
