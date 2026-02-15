@@ -1,33 +1,50 @@
 import discord
-from discord.ext import commands
 import os
+from discord.ext import commands
 
-# Validate token
-TOKEN = os.getenv('DISCORD_TOKEN')
-if not TOKEN:
-    raise ValueError("No token found! Please set the DISCORD_TOKEN environment variable.")
+# Intents are required for receiving certain events
+intents = discord.Intents.default()
+intents.messages = True
+intents.guilds = True
 
-# Create bot instance
-bot = commands.Bot(command_prefix='!')
+# Bot command prefix
+bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Event to handle bot ready
+# Event for when the bot is ready
 @bot.event
 async def on_ready():
-    print(f'We have logged in as {bot.user}')
+    print(f'Logged in as {bot.user.name}')
 
-# Error handling for commands
+# Error handling
 @bot.event
 async def on_command_error(ctx, error):
-    await ctx.send(f'An error occurred: {str(error)}')
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("Command not found.")
+    else:
+        await ctx.send("An error occurred.")
 
-# Example command
+# Ping command
 @bot.command()
 async def ping(ctx):
-    await ctx.send('Pong!')
+    await ctx.send("Pong!")
+
+# Hello command
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f"Hello {ctx.author.mention}!")
+
+# Server information command
+@bot.command()
+async def mminfo(ctx):
+    await ctx.send(f"This server's name is {ctx.guild.name} and it has {ctx.guild.member_count} members.")
+
+# Purge command
+@bot.command()
+@commands.has_permissions(manage_messages=True)
+async def purge(ctx, amount: int):
+    await ctx.channel.purge(limit=amount + 1)
+    await ctx.send(f"Deleted {amount} messages.", delete_after=5)
 
 # Run the bot
-try:
-    bot.run(TOKEN)
-except Exception as e:
-    print(f'Error running the bot: {str(e)}')
-
+TOKEN = os.getenv('DISCORD_TOKEN')  # Ensure your token is securely stored in environment variables
+bot.run(TOKEN)
