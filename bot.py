@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ui import Button, View
 import os
 import asyncio
 
@@ -10,10 +11,35 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='$', intents=intents)
 
+# ===== MMINFO VIEW =====
+class MMInfoView(View):
+    """Persistent view for mminfo command buttons"""
+    
+    def __init__(self):
+        super().__init__(timeout=None)
+    
+    @discord.ui.button(label="✅ Understood", style=discord.ButtonStyle.green, custom_id="mminfo_understood")
+    async def understood_button(self, interaction: discord.Interaction, button: Button):
+        """Handle understood button click"""
+        await interaction.response.send_message(
+            f"{interaction.user.mention} understood the middleman system",
+            ephemeral=False
+        )
+    
+    @discord.ui.button(label="❌ Didn't Understand", style=discord.ButtonStyle.danger, custom_id="mminfo_not_understood")
+    async def not_understood_button(self, interaction: discord.Interaction, button: Button):
+        """Handle didn't understand button click"""
+        await interaction.response.send_message(
+            f"{interaction.user.mention} doesn't understand the middleman system",
+            ephemeral=False
+        )
+
 @bot.event
 async def on_ready():
     print(f'✅ Bot is online as {bot.user}')
     await bot.change_presence(activity=discord.Game(name="$help | Middleman Tickets"))
+    # Register persistent views
+    bot.add_view(MMInfoView())
     print('✅ Ticket system loaded')
 
 # ===== PURGE COMMAND =====
@@ -117,7 +143,7 @@ async def mminfo(ctx):
             inline=False
         )
         
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed, view=MMInfoView())
         
     except Exception as e:
         print(f"Error in mminfo command: {e}")  # Log server-side
