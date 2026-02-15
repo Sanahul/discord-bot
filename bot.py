@@ -22,16 +22,14 @@ class MMInfoView(View):
     async def understood_button(self, interaction: discord.Interaction, button: Button):
         """Handle understood button click"""
         await interaction.response.send_message(
-            f"{interaction.user.mention} understood the middleman system",
-            ephemeral=False
+            f"{interaction.user.mention} understood the middleman system"
         )
     
     @discord.ui.button(label="❌ Didn't Understand", style=discord.ButtonStyle.danger, custom_id="mminfo_not_understood")
     async def not_understood_button(self, interaction: discord.Interaction, button: Button):
         """Handle didn't understand button click"""
         await interaction.response.send_message(
-            f"{interaction.user.mention} doesn't understand the middleman system",
-            ephemeral=False
+            f"{interaction.user.mention} doesn't understand the middleman system"
         )
 
 @bot.event
