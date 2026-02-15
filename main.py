@@ -1,16 +1,29 @@
-import discord
-from discord.ext import commands
+import os
+from discord import Client, Intents
 
-TOKEN = 'your_token'
+# Load the Discord token from environment variables
+TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!')
+# Set intents for the bot
+intents = Intents.default()
+intents.message_content = True
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send('Pong!')
+client = Client(intents=intents)
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send('Hello!')
+@client.event
+async def on_ready():
+    print(f'Logged in as {client.user}')
 
-bot.run(TOKEN)
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content.startswith('!ping'):
+        await message.channel.send('Pong!')
+
+    elif message.content.startswith('!hello'):
+        await message.channel.send('Hello!')
+
+# Run the bot
+client.run(TOKEN)
