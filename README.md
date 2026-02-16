@@ -36,6 +36,8 @@ See [TICKET_SYSTEM.md](TICKET_SYSTEM.md) for detailed documentation.
 - `$purge <amount>` - Delete messages (requires Manage Messages permission)
 - `$serverinfo` - Display information about the server
 - `$mminfo` - Display information about how the Middleman system works
+- `$fee` - Display middleman fee information with payment options
+- `$confirm @user` - Create a trade confirmation request with buttons (restricted to the two users involved)
 
 ### Ticket System Commands
 
