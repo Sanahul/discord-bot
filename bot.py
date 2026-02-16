@@ -193,7 +193,7 @@ async def fee(ctx):
     try:
         # First embed
         embed1 = discord.Embed(
-            title="**MM FEE**",
+            title="MM FEE",
             description=(
                 "Thank You For Using Our services\n"
                 "Your items are currently being held for the time being.\n\n"
