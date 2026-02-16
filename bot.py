@@ -292,12 +292,12 @@ async def fee(ctx):
 
 # ===== CONFIRM COMMAND =====
 @bot.command()
-async def confirm(ctx, member: discord.Member):
-    """Create a trade confirmation request with the mentioned user"""
+async def confirm(ctx, member1: discord.Member, member2: discord.Member):
+    """Create a trade confirmation request with two mentioned users"""
     try:
-        # Check if user is trying to confirm with themselves
-        if ctx.author.id == member.id:
-            await ctx.send("❌ You cannot create a confirmation with yourself.")
+        # Check if both members are the same
+        if member1.id == member2.id:
+            await ctx.send("❌ You cannot create a confirmation with the same user twice.")
             return
         
         # Create embed
@@ -310,12 +310,12 @@ async def confirm(ctx, member: discord.Member):
         # Add field showing the two users involved
         embed.add_field(
             name="Users Involved",
-            value=f"{ctx.author.mention} and {member.mention}",
+            value=f"{member1.mention} and {member2.mention}",
             inline=False
         )
         
         # Create view with restricted access for the two users
-        view = ConfirmView(ctx.author.id, member.id)
+        view = ConfirmView(member1.id, member2.id)
         
         # Send the embed with buttons
         await ctx.send(embed=embed, view=view)
@@ -327,9 +327,9 @@ async def confirm(ctx, member: discord.Member):
 @confirm.error
 async def confirm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("❌ Usage: `$confirm @user`")
+        await ctx.send("❌ Usage: `$confirm @user1 @user2`")
     elif isinstance(error, commands.MemberNotFound):
-        await ctx.send("❌ Member not found. Please mention a valid user.")
+        await ctx.send("❌ Member not found. Please mention two valid users.")
 
 async def load_cogs():
     """Load all cogs"""
