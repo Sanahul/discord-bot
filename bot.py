@@ -71,6 +71,72 @@ class FeeView(View):
             ephemeral=False
         )
 
+# ===== CONFIRM VIEW =====
+class ConfirmView(View):
+    """View for confirm command with restricted button access"""
+    
+    def __init__(self, user1_id: int, user2_id: int):
+        super().__init__(timeout=300)  # 5 minutes timeout
+        self.user1_id = user1_id
+        self.user2_id = user2_id
+        self.confirmed_users = set()
+    
+    def is_authorized_user(self, user_id: int) -> bool:
+        """Check if user is authorized to interact with buttons"""
+        return user_id in [self.user1_id, self.user2_id]
+    
+    @discord.ui.button(label="✅ Confirm", style=discord.ButtonStyle.green, custom_id="confirm_button")
+    async def confirm_button(self, interaction: discord.Interaction, button: Button):
+        """Handle confirm button click"""
+        if not self.is_authorized_user(interaction.user.id):
+            await interaction.response.send_message(
+                "❌ Only the two users involved in the trade can interact with these buttons.",
+                ephemeral=True
+            )
+            return
+        
+        self.confirmed_users.add(interaction.user.id)
+        await interaction.response.send_message(
+            f"✅ {interaction.user.mention} confirmed the trade.",
+            ephemeral=False
+        )
+        
+        # Check if both users confirmed
+        if len(self.confirmed_users) == 2:
+            # Disable all buttons
+            for item in self.children:
+                item.disabled = True
+            
+            # Update the message to disable buttons
+            await interaction.message.edit(view=self)
+            
+            await interaction.followup.send(
+                "🎉 Both users have confirmed the trade!",
+                ephemeral=False
+            )
+    
+    @discord.ui.button(label="❌ Decline", style=discord.ButtonStyle.danger, custom_id="decline_button")
+    async def decline_button(self, interaction: discord.Interaction, button: Button):
+        """Handle decline button click"""
+        if not self.is_authorized_user(interaction.user.id):
+            await interaction.response.send_message(
+                "❌ Only the two users involved in the trade can interact with these buttons.",
+                ephemeral=True
+            )
+            return
+        
+        # Disable all buttons
+        for item in self.children:
+            item.disabled = True
+        
+        # Update the message to disable buttons
+        await interaction.message.edit(view=self)
+        
+        await interaction.response.send_message(
+            f"❌ {interaction.user.mention} declined the trade. Trade cancelled.",
+            ephemeral=False
+        )
+
 @bot.event
 async def on_ready():
     print(f'✅ Bot is online as {bot.user}')
@@ -223,6 +289,47 @@ async def fee(ctx):
     except Exception as e:
         print(f"Error in fee command: {e}")  # Log server-side
         await ctx.send("❌ An error occurred while displaying fee information. Please try again later.")
+
+# ===== CONFIRM COMMAND =====
+@bot.command()
+async def confirm(ctx, member: discord.Member):
+    """Create a trade confirmation request with the mentioned user"""
+    try:
+        # Check if user is trying to confirm with themselves
+        if ctx.author.id == member.id:
+            await ctx.send("❌ You cannot create a confirmation with yourself.")
+            return
+        
+        # Create embed
+        embed = discord.Embed(
+            title="Confirmations",
+            description="Do both users confirm the trade?\nPress Confirm if you agree.\nPress Decline if you don't confirm the trade.",
+            color=0xFFC0CB  # Pink color
+        )
+        
+        # Add field showing the two users involved
+        embed.add_field(
+            name="Users Involved",
+            value=f"{ctx.author.mention} and {member.mention}",
+            inline=False
+        )
+        
+        # Create view with restricted access for the two users
+        view = ConfirmView(ctx.author.id, member.id)
+        
+        # Send the embed with buttons
+        await ctx.send(embed=embed, view=view)
+        
+    except Exception as e:
+        print(f"Error in confirm command: {e}")  # Log server-side
+        await ctx.send("❌ An error occurred while creating the confirmation. Please try again later.")
+
+@confirm.error
+async def confirm_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("❌ Usage: `$confirm @user`")
+    elif isinstance(error, commands.MemberNotFound):
+        await ctx.send("❌ Member not found. Please mention a valid user.")
 
 async def load_cogs():
     """Load all cogs"""
