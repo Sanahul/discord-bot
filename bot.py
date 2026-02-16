@@ -32,6 +32,45 @@ class MMInfoView(View):
             f"{interaction.user.mention} doesn't understand the middleman system"
         )
 
+# ===== FEE VIEW =====
+class FeeView(View):
+    """View for fee command with payment option buttons"""
+    
+    def __init__(self):
+        super().__init__(timeout=None)
+    
+    @discord.ui.button(label="100%", style=discord.ButtonStyle.primary, custom_id="fee_100_percent")
+    async def full_fee_button(self, interaction: discord.Interaction, button: Button):
+        """Handle 100% fee button click"""
+        # Disable all buttons
+        for item in self.children:
+            item.disabled = True
+        
+        # Update the message to disable buttons
+        await interaction.message.edit(view=self)
+        
+        # Send public message
+        await interaction.response.send_message(
+            f"{interaction.user.mention} decided to pay 100% of the fee",
+            ephemeral=False
+        )
+    
+    @discord.ui.button(label="50% Each", style=discord.ButtonStyle.primary, custom_id="fee_50_percent")
+    async def split_fee_button(self, interaction: discord.Interaction, button: Button):
+        """Handle 50% each fee button click"""
+        # Disable all buttons
+        for item in self.children:
+            item.disabled = True
+        
+        # Update the message to disable buttons
+        await interaction.message.edit(view=self)
+        
+        # Send public message
+        await interaction.response.send_message(
+            f"{interaction.user.mention} decided to pay 50% each",
+            ephemeral=False
+        )
+
 @bot.event
 async def on_ready():
     print(f'✅ Bot is online as {bot.user}')
@@ -146,6 +185,44 @@ async def mminfo(ctx):
     except Exception as e:
         print(f"Error in mminfo command: {e}")  # Log server-side
         await ctx.send("❌ An error occurred while fetching middleman information. Please try again later.")
+
+# ===== FEE COMMAND =====
+@bot.command()
+async def fee(ctx):
+    """Display fee information with payment options"""
+    try:
+        # First embed
+        embed1 = discord.Embed(
+            title="MM FEE",
+            description=(
+                "Thank You For Using Our services\n"
+                "Your items are currently being held for the time being.\n\n"
+                "To proceed with the trade, please make the necessary donations that the MM deserves. We appreciate your cooperation."
+            ),
+            color=0xFFC0CB  # Pink color
+        )
+        
+        # Second embed
+        embed2 = discord.Embed(
+            description=(
+                "Please be patient while a MM will list a price\n"
+                "Discuss with your trader about how you would want to do the Fee.\n\n"
+                "Users are able to split the fee OR manage to pay the full fee if possible.\n"
+                "(Once clicked, you can't redo)"
+            ),
+            color=0xFFC0CB  # Pink color
+        )
+        
+        # Create view with buttons
+        view = FeeView()
+        
+        # Send both embeds with buttons
+        await ctx.send(embed=embed1)
+        await ctx.send(embed=embed2, view=view)
+        
+    except Exception as e:
+        print(f"Error in fee command: {e}")  # Log server-side
+        await ctx.send("❌ An error occurred while displaying fee information. Please try again later.")
 
 async def load_cogs():
     """Load all cogs"""
