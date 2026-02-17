@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ui import Button, View
 import os
 import asyncio
+import datetime
 
 # Bot setup
 intents = discord.Intents.default()
@@ -363,14 +364,14 @@ async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
         # Create embed with ban details
         embed = discord.Embed(
             title="User Banned",
-            description=f"✅ {user.mention} has been successfully banned from the server.",
+            description="✅ User has been successfully banned from the server.",
             color=0xFF0000  # Red color for danger
         )
         
         embed.add_field(name="Banned User", value=f"{user.mention} ({user})", inline=False)
         embed.add_field(name="Moderator", value=f"{ctx.author.mention} ({ctx.author})", inline=False)
         embed.add_field(name="Reason", value=reason, inline=False)
-        embed.add_field(name="Timestamp", value=discord.utils.format_dt(discord.utils.utcnow(), style='F'), inline=False)
+        embed.add_field(name="Timestamp", value=discord.utils.format_dt(datetime.datetime.now(datetime.timezone.utc), style='F'), inline=False)
         
         # Send embed
         await ctx.send(embed=embed)
