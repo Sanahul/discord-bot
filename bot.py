@@ -347,14 +347,20 @@ async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
             await ctx.send("❌ You cannot ban the bot.")
             return
         
-        # Check if the target user has higher or equal role than the command issuer
-        if ctx.author.top_role <= user.top_role and ctx.author.id != ctx.guild.owner_id:
+        # Check if the target user has higher or equal role than the command issuer (unless guild owner)
+        if ctx.author.id != ctx.guild.owner_id and ctx.author.top_role <= user.top_role:
             await ctx.send("❌ You cannot ban a user with a role higher than or equal to yours.")
+            return
+        
+        # Check if the bot has permission to ban this user
+        if ctx.guild.me.top_role <= user.top_role:
+            await ctx.send("❌ I cannot ban this user. My role is not high enough.")
             return
         
         # Create embed with ban details
         embed = discord.Embed(
             title="User Banned",
+            description=f"✅ {user.mention} has been successfully banned from the server.",
             color=0xFF0000  # Red color for danger
         )
         
@@ -368,7 +374,6 @@ async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
         
         # Send embed
         await ctx.send(embed=embed)
-        await ctx.send(f"✅ {user.mention} has been successfully banned from the server.")
         
     except discord.Forbidden:
         await ctx.send("❌ I don't have permission to ban this user. Make sure my role is higher than the user's role.")
