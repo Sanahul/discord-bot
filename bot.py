@@ -348,13 +348,13 @@ async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
             await ctx.send("❌ You cannot ban the bot.")
             return
         
-        # Check if the target user has higher role than the command issuer (unless guild owner)
-        if ctx.author.id != ctx.guild.owner_id and ctx.author.top_role < user.top_role:
-            await ctx.send("❌ You cannot ban a user with a role higher than yours.")
+        # Check if the target user has higher or equal role than the command issuer (unless guild owner)
+        if ctx.author.id != ctx.guild.owner_id and ctx.author.top_role <= user.top_role:
+            await ctx.send("❌ You cannot ban a user with a role higher than or equal to yours.")
             return
         
         # Check if the bot has permission to ban this user
-        if ctx.guild.me.top_role < user.top_role:
+        if ctx.guild.me.top_role <= user.top_role:
             await ctx.send("❌ I cannot ban this user. My role is not high enough.")
             return
         
