@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ui import Button, View
 import os
 import asyncio
+from datetime import datetime, timezone
 
 # Bot setup
 intents = discord.Intents.default()
@@ -328,6 +329,70 @@ async def confirm(ctx, user1: discord.Member, user2: discord.Member):
 async def confirm_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("❌ Usage: `$confirm @user1 @user2`")
+    elif isinstance(error, commands.MemberNotFound):
+        await ctx.send("❌ Member not found. Please mention a valid user.")
+
+# ===== BAN COMMAND =====
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
+    """Ban a user from the server"""
+    try:
+        # Check if user is trying to ban themselves
+        if user.id == ctx.author.id:
+            await ctx.send("❌ You cannot ban yourself.")
+            return
+        
+        # Check if user is trying to ban the bot
+        if user.id == bot.user.id:
+            await ctx.send("❌ You cannot ban the bot.")
+            return
+        
+        # Check if the target user has higher or equal role than the command issuer (unless guild owner)
+        if ctx.author.id != ctx.guild.owner_id and ctx.author.top_role <= user.top_role:
+            await ctx.send("❌ You cannot ban a user with a role higher than or equal to yours.")
+            return
+        
+        # Check if the bot has permission to ban this user
+        if ctx.guild.me.top_role <= user.top_role:
+            await ctx.send("❌ I cannot ban this user. My role is not high enough.")
+            return
+        
+        # Capture timestamp before ban
+        ban_time = datetime.now(timezone.utc)
+        
+        # Ban the user
+        await ctx.guild.ban(user, reason=reason)
+        
+        # Create embed with ban details
+        embed = discord.Embed(
+            title="User Banned",
+            description="✅ User has been successfully banned from the server.",
+            color=0xFF0000  # Red color for danger
+        )
+        
+        embed.add_field(name="Banned User", value=f"{user.mention} ({user})", inline=False)
+        embed.add_field(name="Moderator", value=f"{ctx.author.mention} ({ctx.author})", inline=False)
+        embed.add_field(name="Reason", value=reason, inline=False)
+        embed.add_field(name="Timestamp", value=discord.utils.format_dt(ban_time, style='F'), inline=False)
+        
+        # Send embed
+        await ctx.send(embed=embed)
+        
+    except discord.Forbidden:
+        await ctx.send("❌ I don't have permission to ban this user. Make sure my role is higher than the user's role.")
+    except discord.HTTPException:
+        await ctx.send("❌ Failed to ban the user. They may already be banned.")
+    except Exception as e:
+        print(f"Error in ban command: {e}")  # Log server-side
+        await ctx.send("❌ An error occurred while trying to ban the user. Please try again later.")
+
+@ban.error
+async def ban_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("❌ You don't have permission to use this command. (Requires `Administrator`)")
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("❌ Usage: `$ban @user [reason]`")
     elif isinstance(error, commands.MemberNotFound):
         await ctx.send("❌ Member not found. Please mention a valid user.")
 
