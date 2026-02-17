@@ -357,6 +357,9 @@ async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
             await ctx.send("❌ I cannot ban this user. My role is not high enough.")
             return
         
+        # Ban the user
+        await ctx.guild.ban(user, reason=reason)
+        
         # Create embed with ban details
         embed = discord.Embed(
             title="User Banned",
@@ -368,9 +371,6 @@ async def ban(ctx, user: discord.Member, *, reason: str = "No reason provided"):
         embed.add_field(name="Moderator", value=f"{ctx.author.mention} ({ctx.author})", inline=False)
         embed.add_field(name="Reason", value=reason, inline=False)
         embed.add_field(name="Timestamp", value=discord.utils.format_dt(discord.utils.utcnow(), style='F'), inline=False)
-        
-        # Ban the user
-        await ctx.guild.ban(user, reason=reason)
         
         # Send embed
         await ctx.send(embed=embed)
