@@ -146,6 +146,43 @@ async def on_ready():
     bot.add_view(MMInfoView())
     print('✅ Ticket system loaded')
 
+# ===== WELCOME EVENT =====
+@bot.event
+async def on_member_join(member):
+    """Send a welcome message when a new member joins the server"""
+    guild = member.guild
+
+    # Find the welcome channel by name or by environment variable
+    welcome_channel_name = os.getenv('WELCOME_CHANNEL', 'welcome')
+    welcome_channel = discord.utils.get(guild.text_channels, name=welcome_channel_name)
+
+    if welcome_channel is None:
+        return
+
+    try:
+        embed = discord.Embed(
+            title="✨ Welcome to the server! ✨",
+            description=(
+                f"Hey {member.mention}! 👋 Welcome aboard!\n\n"
+                "**Here are a few things to get started:**\n"
+                "✓ Read the rules\n"
+                "✓ Check out the middleman system\n"
+                "✓ Introduce yourself"
+            ),
+            color=0xFFC0CB  # Pink color
+        )
+
+        embed.add_field(name="👥 Member Count", value=guild.member_count, inline=False)
+
+        embed.set_thumbnail(url=member.display_avatar.url)
+
+        await welcome_channel.send(embed=embed)
+
+    except discord.Forbidden:
+        print(f"⚠️ Missing permissions to send welcome message in #{welcome_channel.name}")
+    except Exception as e:
+        print(f"Error in on_member_join event: {e}")
+
 # ===== PURGE COMMAND =====
 @bot.command()
 @commands.has_permissions(manage_messages=True)
