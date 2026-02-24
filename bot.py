@@ -396,6 +396,67 @@ async def ban_error(ctx, error):
     elif isinstance(error, commands.MemberNotFound):
         await ctx.send("❌ Member not found. Please mention a valid user.")
 
+# ===== DEMO COMMAND =====
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def demo(ctx, user: discord.Member):
+    """Remove all roles from a mentioned user"""
+    try:
+        # Check if user is trying to demo themselves
+        if user.id == ctx.author.id:
+            await ctx.send("❌ You cannot remove your own roles with this command.")
+            return
+
+        # Check if user is trying to demo the bot
+        if user.id == bot.user.id:
+            await ctx.send("❌ You cannot remove the bot's roles.")
+            return
+
+        # Check if the bot has permission to modify this user (role hierarchy)
+        if ctx.guild.me.top_role <= user.top_role:
+            await ctx.send("❌ I cannot remove roles from this user. My role is not high enough.")
+            return
+
+        # Get all roles except @everyone
+        roles_to_remove = [role for role in user.roles if role != ctx.guild.default_role]
+
+        if not roles_to_remove:
+            await ctx.send(f"ℹ️ {user.mention} has no roles to remove.")
+            return
+
+        # Remove all roles
+        await user.remove_roles(*roles_to_remove, reason=f"Demo command used by {ctx.author}")
+
+        # Create embed with details
+        embed = discord.Embed(
+            title="Roles Removed",
+            description=f"✅ All roles have been successfully removed from {user.mention}.",
+            color=0xFFC0CB  # Pink color
+        )
+
+        embed.add_field(name="User", value=f"{user.mention} ({user})", inline=False)
+        embed.add_field(name="Moderator", value=f"{ctx.author.mention} ({ctx.author})", inline=False)
+        embed.add_field(name="Roles Removed", value=", ".join(role.name for role in roles_to_remove), inline=False)
+
+        await ctx.send(embed=embed)
+
+    except discord.Forbidden:
+        await ctx.send("❌ I don't have permission to remove roles from this user. Make sure my role is higher than the user's roles.")
+    except discord.HTTPException:
+        await ctx.send("❌ Failed to remove roles from the user. Please try again later.")
+    except Exception as e:
+        print(f"Error in demo command: {e}")  # Log server-side
+        await ctx.send("❌ An error occurred while trying to remove roles. Please try again later.")
+
+@demo.error
+async def demo_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("❌ You don't have permission to use this command. (Requires `Administrator`)")
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("❌ Usage: `$demo @user`")
+    elif isinstance(error, commands.MemberNotFound):
+        await ctx.send("❌ Member not found. Please mention a valid user.")
+
 async def load_cogs():
     """Load all cogs"""
     await bot.load_extension('cogs.ticket_system')
