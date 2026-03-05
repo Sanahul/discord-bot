@@ -140,9 +140,9 @@ class TicketSystem(commands.Cog):
             if role:
                 return role
         
-        # Auto-detect: look for roles containing "middleman" or "support"
+        # Auto-detect: look for roles containing known staff keywords
         for role in guild.roles:
-            if 'middleman' in role.name.lower() or 'support' in role.name.lower():
+            if any(keyword in role.name.lower() for keyword in ('middleman', 'support', 'custom')):
                 return role
         
         return None
@@ -284,7 +284,31 @@ class TicketSystem(commands.Cog):
             await ctx.send("❌ Usage: `$setlogchannel #channel`")
         elif isinstance(error, commands.ChannelNotFound):
             await ctx.send("❌ Channel not found. Please mention a valid channel.")
-    
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def createcustomrole(self, ctx):
+        """Create a 'Custom' role in the server for use with the ticket system"""
+        existing_role = discord.utils.get(ctx.guild.roles, name="Custom")
+        if existing_role:
+            await ctx.send(f"❌ A role named **Custom** already exists: {existing_role.mention}")
+            return
+
+        role = await ctx.guild.create_role(
+            name="Custom",
+            color=discord.Color.blurple(),
+            mentionable=True,
+            reason=f"Custom role created by {ctx.author} via bot command"
+        )
+        self.config['support_role_id'] = role.id
+        self.save_config()
+        await ctx.send(f"✅ Created the **Custom** role {role.mention} and set it as the support role.")
+
+    @createcustomrole.error
+    async def createcustomrole_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("❌ You need Administrator permission to use this command.")
+
     # ===== TICKET CREATION =====
     
     async def create_ticket(self, interaction, trader, giving, receiving):
