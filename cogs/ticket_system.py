@@ -287,27 +287,39 @@ class TicketSystem(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
-    async def createcustomrole(self, ctx):
-        """Create a 'Custom' role in the server for use with the ticket system"""
-        existing_role = discord.utils.get(ctx.guild.roles, name="Custom")
+    async def createrole(self, ctx, role_name: str, color: str = None, mentionable: bool = True):
+        """Create a custom role with optional color and mentionable settings"""
+        existing_role = discord.utils.get(ctx.guild.roles, name=role_name)
         if existing_role:
-            await ctx.send(f"❌ A role named **Custom** already exists: {existing_role.mention}")
+            await ctx.send(f"❌ A role named **{role_name}** already exists: {existing_role.mention}")
             return
 
+        role_color = discord.Color.blurple()
+        if color is not None:
+            original_color = color
+            color = color.lstrip('#')
+            try:
+                role_color = discord.Color(int(color, 16))
+            except ValueError:
+                await ctx.send(f"❌ Invalid color code `{original_color}`. Please use a valid hex color (e.g., `#FF5733`).")
+                return
+
         role = await ctx.guild.create_role(
-            name="Custom",
-            color=discord.Color.blurple(),
-            mentionable=True,
-            reason=f"Custom role created by {ctx.author} via bot command"
+            name=role_name,
+            color=role_color,
+            mentionable=mentionable,
+            reason=f"Role created by {ctx.author} via $createrole command"
         )
         self.config['support_role_id'] = role.id
         self.save_config()
-        await ctx.send(f"✅ Created the **Custom** role {role.mention} and set it as the support role.")
+        await ctx.send(f"✅ Created the **{role_name}** role {role.mention} and set it as the support role.")
 
-    @createcustomrole.error
-    async def createcustomrole_error(self, ctx, error):
+    @createrole.error
+    async def createrole_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You need Administrator permission to use this command.")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("❌ Usage: `$createrole <role_name> [color] [mentionable]`\nExample: `$createrole Middleman #FF5733 true`")
 
     # ===== TICKET CREATION =====
     
