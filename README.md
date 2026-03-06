@@ -57,11 +57,10 @@ See [TICKET_SYSTEM.md](TICKET_SYSTEM.md) for detailed documentation.
 - `$setsupportrole @role` - Set the support/middleman role
 - `$setticketcategory CategoryName` - Set ticket category
 - `$setlogchannel #channel` - Set log channel
-- `$createcustomrole` - Create a "Custom" role and set it as the support role
 
 ## Setup
 
-1. Create a "Middleman", "Support", or "Custom" role in your Discord server (or use the `$setsupportrole` or `$createcustomrole` command)
+1. Create a "Middleman", "Support", or "Custom" role in your Discord server (or use the `$setsupportrole` command)
 2. Run `$ticketpanel` in the channel where you want users to create tickets
 3. Users can click the "Create Ticket" button to start
 
