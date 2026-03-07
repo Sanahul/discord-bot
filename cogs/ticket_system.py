@@ -208,13 +208,21 @@ class TicketSystem(commands.Cog):
             color=0xFFC0CB  # Pink color
         )
         
-        # Embed 4 - Need a trusted Middleman
+        # Embed 4 - Middleman Request panel
         embed4 = discord.Embed(
-            title="**need a trusted Middleman**",
             description=(
-                "• open a ticket and complete the form, including the User ID of the person you are trading with.\n"
-                "• only individuals with the MM role can serve as middlemen; be sure to check their limits beforehand.\n"
-                "• disclaimer: while we aim to respond to tickets as quickly as possible, please understand that we have other responsibilities."
+                "┏━━━ 💗 Secure Middleman Service 💗 ━━━┓\n\n"
+                "Trade safely with our trusted middleman team.\n\n"
+                "**How it works**\n"
+                "🌷 Click the request button\n"
+                "🌷 Fill out the trade form\n"
+                "🌷 Wait for a middleman to claim your ticket\n\n"
+                "**Form Questions**\n"
+                "♡ Other trader username\n"
+                "♡ What you are giving\n"
+                "♡ What the other trader is giving\n\n"
+                "⚠ Scamming or trolling will lead to permanent blacklist.\n\n"
+                "┗━━━━━━━━━━━━━━━━━━━━┛"
             ),
             color=0xFFC0CB  # Pink color
         )
