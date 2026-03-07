@@ -172,43 +172,7 @@ class TicketSystem(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def ticketpanel(self, ctx):
         """Create the ticket panel with create ticket button"""
-        # Embed 1 - Welcome/Header with image
-        embed1 = discord.Embed(color=0xFFC0CB)  # Pink color
-        embed1.set_image(url="https://cdn.discordapp.com/attachments/1466064818329882649/1472600743084167199/11223522fd5e54a39e3839fbb5dda945-1.jpg?ex=699329d0&is=6991d850&hm=4bb941c5b7d7e13a3e879947f9b6ce4b2ecadb4bc512b1edc14c4387697a071d&")
-        
-        # Embed 2 - Middleman rules and information
-        embed2 = discord.Embed(
-            title="**Middleman rules and information**",
-            description=(
-                "• at the moment, we do not MM account trades unless the other side is holdable (ex. pp for roblox). it is your responsibility to secure the account you receive. keep in mind we only have 1 account mm if the account needs to be held. \n"
-                "• we can MM trades involving gift cards, as long as the other side of the trade is holdable! (example: adopt me for gift card)\n"
-                "• we are not responsible for any items lost during or after the trade. (ex. if our account gets banned on roblox mid trade). make sure all the info you provide in the ticket is accurate. if it is incorrect and we send items to the wrong person, we are not responsible.\n"
-                "• we do not handle conversions or exchanges. please complete any necessary exchanges before opening a ticket.\n"
-                "• a tip is REQUIRED for all risky trades.\n"
-                "• the tip amount depends on the middleman and the trade value. a tip is non refundable, if you held your item/ received it, we still keep our tip even if the trade is canceled. \n"
-                "• you must comply with the middleman and follow their TOS.\n"
-                "• please understand the risks involved before you continue with a trade/ticket.\n"
-                "• the middleman can decline any trade they're not comfortable with—please respect their decision and avoid arguing.\n"
-                "• ghosting/scamming a trade is bannable (don't do it).\n"
-                "• you cannot choose your middleman unless you need icyella herself. you can request a new mm if there are any issues i.e. fees, etc.\n"
-                "• please keep in mind before opening a MM ticket for ella that she does require a 5% fee."
-            ),
-            color=0xFFC0CB  # Pink color
-        )
-        
-        # Embed 3 - Additional information
-        embed3 = discord.Embed(
-            title="**additional information**",
-            description=(
-                "• if you're trading for cashapp make sure you both have adult cashapp accounts or minor cashapp accounts.\n"
-                "cashapp will not let adults receive/send money to minors & vice versa.\n"
-                "• if you have any questions or concerns regarding MMs, mmban, or ticket info please make a ticket in the HR section.\n"
-                "• always remember just because someone has mod doesn't mean they are MM's, it is separate."
-            ),
-            color=0xFFC0CB  # Pink color
-        )
-        
-        # Embed 4 - Middleman Request panel
+        # Embed - Middleman Request panel
         embed4 = discord.Embed(
             description=(
                 "┏━━━ 💗 Secure Middleman Service 💗 ━━━┓\n\n"
@@ -227,10 +191,9 @@ class TicketSystem(commands.Cog):
             color=0xFFC0CB  # Pink color
         )
         
+        embed4.set_image(url="https://cdn.discordapp.com/attachments/1395114693013803195/1479771297268502631/553f482c993585243f459ec50e45f16f.jpg?ex=69ad3fea&is=69abee6a&hm=c9d601727abb141bc191075735d1f1c67da82fd00afbeaaed69b0b39adacb036&")
+        
         view = TicketPanelView(self)
-        await ctx.send(embed=embed1)
-        await ctx.send(embed=embed2)
-        await ctx.send(embed=embed3)
         await ctx.send(embed=embed4, view=view)
         await ctx.message.delete()
     
