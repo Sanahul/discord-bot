@@ -356,7 +356,101 @@ class TicketSystem(commands.Cog):
         )
     
     # ===== USER COMMANDS =====
-    
+
+    @commands.command()
+    async def mminfo(self, ctx):
+        """Display information about how the Middleman system works"""
+        # Embed 1: What is a Middleman?
+        embed1 = discord.Embed(
+            title="💗 What is a Middleman?",
+            description=(
+                "┏━━━ 💗 Middleman Info 💗 ━━━┓\n\n"
+                "A **Middleman** is a trusted, neutral third-party who facilitates trades "
+                "between two players to ensure both sides are safe and the deal goes smoothly.\n\n"
+                "**Why use a Middleman?**\n"
+                "🌷 Prevents scams and fraud\n"
+                "🌷 Ensures both sides receive what was agreed upon\n"
+                "🌷 Provides a verified, unbiased witness\n"
+                "🌷 Resolves disputes fairly if anything goes wrong\n\n"
+                "**Security Benefits**\n"
+                "♡ Your items are never at risk\n"
+                "♡ Trades are monitored from start to finish\n"
+                "♡ All middlemen are vetted & trusted staff\n\n"
+                "┗━━━━━━━━━━━━━━━━━━━━┛"
+            ),
+            color=0xFFC0CB
+        )
+
+        # Embed 2: How does it work?
+        embed2 = discord.Embed(
+            title="🌸 How Does It Work?",
+            description=(
+                "┏━━━ 🌸 Step-by-Step Process 🌸 ━━━┓\n\n"
+                "**Step 1 — Open a Ticket**\n"
+                "🎫 Use the ticket panel to create a trade request.\n"
+                "Fill in the trade form with:\n"
+                "  ♡ The other trader's username\n"
+                "  ♡ What you are giving\n"
+                "  ♡ What you are receiving\n\n"
+                "**Step 2 — Wait for a Middleman**\n"
+                "⏳ A staff middleman will claim your ticket shortly.\n\n"
+                "**Step 3 — The Trade**\n"
+                "🤝 Both traders send their items/payment to the middleman.\n"
+                "The middleman verifies everything is correct.\n\n"
+                "**Step 4 — Completion**\n"
+                "✅ The middleman distributes items to both parties.\n"
+                "The ticket is then closed.\n\n"
+                "┗━━━━━━━━━━━━━━━━━━━━┛"
+            ),
+            color=0xFFC0CB
+        )
+
+        # Embed 3: Fees
+        embed3 = discord.Embed(
+            title="💰 Fees",
+            description=(
+                "┏━━━ 💰 Fee Information 💰 ━━━┓\n\n"
+                "**Typical Fee**\n"
+                "🌷 Fees vary depending on the trade value and type.\n"
+                "🌷 Your middleman will inform you of any applicable fees "
+                "before the trade begins.\n\n"
+                "**When Do Fees Apply?**\n"
+                "♡ High-value or complex trades\n"
+                "♡ Trades requiring extra verification steps\n\n"
+                "**Payment Options**\n"
+                "♡ Fees can be paid in agreed-upon in-game currency or items\n"
+                "♡ Always confirm payment terms with your middleman first\n\n"
+                "⚠ Never pay fees to anyone other than the assigned middleman.\n\n"
+                "┗━━━━━━━━━━━━━━━━━━━━┛"
+            ),
+            color=0xFFC0CB
+        )
+
+        # Embed 4: Trust & Safety
+        embed4 = discord.Embed(
+            title="🛡️ Trust & Safety",
+            description=(
+                "┏━━━ 🛡️ Trust & Safety 🛡️ ━━━┓\n\n"
+                "**Verification Requirements**\n"
+                "🌷 All middlemen are verified trusted staff members\n"
+                "🌷 Middlemen are required to follow strict trade protocols\n\n"
+                "**What to Expect**\n"
+                "♡ Professional and impartial service\n"
+                "♡ Clear communication throughout the trade\n"
+                "♡ Fair resolution if any issues arise\n\n"
+                "**Scam Prevention Tips**\n"
+                "⚠ Only trade through official tickets\n"
+                "⚠ Never share login credentials or personal info\n"
+                "⚠ Do not accept middleman offers via DMs — always use this server\n"
+                "⚠ Report suspicious behavior to staff immediately\n\n"
+                "Scamming or trolling will result in a **permanent blacklist**.\n\n"
+                "┗━━━━━━━━━━━━━━━━━━━━┛"
+            ),
+            color=0xFFC0CB
+        )
+
+        await ctx.send(embeds=[embed1, embed2, embed3, embed4])
+
     @commands.command()
     async def add(self, ctx, member: discord.Member):
         """Add a user to the ticket"""
