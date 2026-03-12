@@ -38,6 +38,7 @@ See [TICKET_SYSTEM.md](TICKET_SYSTEM.md) for detailed documentation.
 - `$mminfo` - Display information about how the Middleman system works
 - `$fee` - Display middleman fee information with payment options
 - `$confirm @user` - Create a trade confirmation request with buttons (restricted to the two users involved)
+- `$w [@user]` - Display detailed user information (username, ID, roles, permissions, activity, badges, and more). Defaults to yourself if no user is mentioned.
 
 ### Ticket System Commands
 
